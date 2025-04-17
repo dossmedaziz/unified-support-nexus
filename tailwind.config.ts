@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,21 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				kidpurple: {
+					light: '#E5DEFF',
+					DEFAULT: '#9b87f5',
+					dark: '#7E69AB'
+				},
+				kidpink: {
+					light: '#FFDEE2',
+					DEFAULT: '#FF6D8F',
+					dark: '#E95578'
+				},
+				kidblue: {
+					light: '#D3E4FD',
+					DEFAULT: '#33C3F0',
+					dark: '#1EAEDB'
 				}
 			},
 			borderRadius: {
@@ -89,6 +105,9 @@ export default {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out'
+			},
+			fontFamily: {
+				nunito: ['Nunito', 'sans-serif']
 			}
 		}
 	},

@@ -5,7 +5,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 240 20% 98%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -14,7 +14,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 270 70% 60%;
+    --primary: 270 70% 55%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 270 70% 95%;
@@ -23,8 +23,8 @@
     --muted: 270 70% 95%;
     --muted-foreground: 270 60% 40%;
 
-    --accent: 270 70% 95%;
-    --accent-foreground: 270 70% 30%;
+    --accent: 288 95% 65%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
@@ -33,11 +33,11 @@
     --input: 270 70% 90%;
     --ring: 270 70% 50%;
 
-    --radius: 1rem;
+    --radius: 1.5rem;
 
     --sidebar-background: 270 70% 97%;
     --sidebar-foreground: 270 60% 40%;
-    --sidebar-primary: 270 70% 50%;
+    --sidebar-primary: 288 95% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 270 70% 95%;
     --sidebar-accent-foreground: 270 70% 30%;
@@ -55,7 +55,7 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 270 70% 60%;
+    --primary: 288 95% 65%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 270 30% 20%;
@@ -64,8 +64,8 @@
     --muted: 270 30% 20%;
     --muted-foreground: 270 40% 70%;
 
-    --accent: 270 30% 20%;
-    --accent-foreground: 270 70% 90%;
+    --accent: 288 95% 65%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
@@ -76,7 +76,7 @@
     
     --sidebar-background: 270 30% 15%;
     --sidebar-foreground: 270 40% 90%;
-    --sidebar-primary: 270 70% 60%;
+    --sidebar-primary: 288 95% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 270 30% 20%;
     --sidebar-accent-foreground: 270 40% 90%;
@@ -92,20 +92,22 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Nunito', sans-serif;
   }
 }
 
 /* Add some child-friendly styles */
 @layer components {
   .rounded-card {
-    @apply rounded-xl border-2 border-purple-200 shadow-md overflow-hidden;
+    @apply rounded-2xl border-2 border-purple-200 shadow-md overflow-hidden;
   }
   
   .child-gradient {
-    @apply bg-gradient-to-r from-purple-500 to-blue-500;
+    @apply bg-gradient-to-r from-accent to-primary;
   }
   
   .child-button {
-    @apply rounded-full bg-purple-500 text-white font-medium hover:bg-purple-600 focus:ring-2 focus:ring-purple-300 transition-all;
+    @apply rounded-full bg-accent text-white font-medium hover:bg-purple-600 focus:ring-2 focus:ring-purple-300 transition-all;
   }
 }
+

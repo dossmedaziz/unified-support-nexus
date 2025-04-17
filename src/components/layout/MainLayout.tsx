@@ -26,7 +26,7 @@ export function MainLayout({ children }: MainLayoutProps) {
   };
   
   return (
-    <div className="flex h-screen bg-blue-50">
+    <div className="flex h-screen bg-gradient-to-b from-purple-50 to-blue-50">
       <Sidebar onToggle={handleSidebarToggle} />
       <div 
         className="flex-1 transition-all duration-300"
@@ -37,7 +37,9 @@ export function MainLayout({ children }: MainLayoutProps) {
       >
         <Header />
         <main className="p-4 md:p-6 overflow-auto">
-          {children}
+          <div className="rounded-2xl bg-white shadow-sm border border-purple-100 p-4 md:p-6">
+            {children}
+          </div>
         </main>
       </div>
     </div>
