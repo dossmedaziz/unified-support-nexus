@@ -2,6 +2,7 @@
 import { ReactNode, useState, useEffect } from "react";
 import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type MainLayoutProps = {
   children: ReactNode;
@@ -9,20 +10,33 @@ type MainLayoutProps = {
 
 export function MainLayout({ children }: MainLayoutProps) {
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
+  const isMobile = useIsMobile();
+  
+  // Auto-collapse sidebar on mobile
+  useEffect(() => {
+    if (isMobile) {
+      setSidebarExpanded(false);
+    } else {
+      setSidebarExpanded(true);
+    }
+  }, [isMobile]);
   
   const handleSidebarToggle = (expanded: boolean) => {
     setSidebarExpanded(expanded);
   };
   
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-blue-50">
       <Sidebar onToggle={handleSidebarToggle} />
       <div 
         className="flex-1 transition-all duration-300"
-        style={{ marginLeft: sidebarExpanded ? '16rem' : '5rem' }}
+        style={{ 
+          marginLeft: isMobile ? '0' : (sidebarExpanded ? '16rem' : '5rem'),
+          width: isMobile ? '100%' : 'auto'
+        }}
       >
         <Header />
-        <main className="p-6">
+        <main className="p-4 md:p-6 overflow-auto">
           {children}
         </main>
       </div>

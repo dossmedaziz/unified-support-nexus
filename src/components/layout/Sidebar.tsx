@@ -2,19 +2,21 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { 
-  BarChart2, 
+  Home, 
   MessageSquare, 
   Ticket, 
   Users, 
   Settings, 
   Menu, 
-  X 
+  X,
+  Smile,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
-  { name: "Dashboard", path: "/", icon: BarChart2 },
+  { name: "Dashboard", path: "/", icon: Home },
   { name: "Inbox", path: "/inbox", icon: MessageSquare },
   { name: "Tickets", path: "/tickets", icon: Ticket },
   { name: "Team", path: "/team", icon: Users },
@@ -28,6 +30,12 @@ interface SidebarProps {
 export function Sidebar({ onToggle }: SidebarProps) {
   const [expanded, setExpanded] = useState(true);
   const location = useLocation();
+  const isMobile = useIsMobile();
+  
+  // Set initial state based on screen size
+  useEffect(() => {
+    setExpanded(!isMobile);
+  }, [isMobile]);
   
   // Notify parent component when sidebar expands/collapses
   useEffect(() => {
@@ -39,18 +47,23 @@ export function Sidebar({ onToggle }: SidebarProps) {
   return (
     <div 
       className={cn(
-        "h-screen fixed left-0 top-0 z-40 flex flex-col bg-white border-r transition-all duration-300",
-        expanded ? "w-64" : "w-20"
+        "h-screen fixed left-0 top-0 z-40 flex flex-col transition-all duration-300",
+        expanded ? "w-64" : "w-20",
+        isMobile && !expanded ? "-translate-x-full" : "translate-x-0",
+        "bg-gradient-to-b from-purple-100 to-blue-100 border-r border-purple-200"
       )}
     >
-      <div className="flex items-center p-4 border-b h-16">
+      <div className="flex items-center p-4 border-b border-purple-200 h-16">
         {expanded && (
-          <h1 className="text-xl font-bold">Support Hub</h1>
+          <div className="flex items-center">
+            <Smile className="h-6 w-6 text-purple-500 mr-2" />
+            <h1 className="text-xl font-bold text-purple-700">KidSupport</h1>
+          </div>
         )}
         <Button 
           variant="ghost" 
           size="icon" 
-          className={cn("ml-auto")}
+          className={cn("ml-auto text-purple-700 hover:bg-purple-200 hover:text-purple-800")}
           onClick={() => setExpanded(!expanded)}
         >
           {expanded ? <X size={20} /> : <Menu size={20} />}
@@ -70,13 +83,13 @@ export function Sidebar({ onToggle }: SidebarProps) {
                   className={cn(
                     "flex items-center p-3 rounded-md transition-colors",
                     isActive 
-                      ? "bg-blue-100 text-blue-600" 
-                      : "text-gray-700 hover:bg-gray-100",
+                      ? "bg-purple-200 text-purple-700" 
+                      : "text-purple-600 hover:bg-purple-100",
                     !expanded && "justify-center"
                   )}
                 >
                   <Icon size={20} className={expanded ? "mr-3" : ""} />
-                  {expanded && <span>{item.name}</span>}
+                  {expanded && <span className="font-medium">{item.name}</span>}
                 </Link>
               </li>
             );
@@ -84,15 +97,15 @@ export function Sidebar({ onToggle }: SidebarProps) {
         </ul>
       </nav>
       
-      <div className="p-4 border-t">
+      <div className="p-4 border-t border-purple-200">
         <div className="flex items-center">
-          <div className="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full bg-purple-500 text-white flex items-center justify-center">
             A
           </div>
           {expanded && (
             <div className="ml-3">
-              <p className="font-medium">Admin User</p>
-              <p className="text-xs text-gray-500">Administrator</p>
+              <p className="font-medium text-purple-700">Admin User</p>
+              <p className="text-xs text-purple-500">Administrator</p>
             </div>
           )}
         </div>
