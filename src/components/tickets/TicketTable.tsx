@@ -1,5 +1,5 @@
-
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { 
@@ -148,6 +148,7 @@ const mockTickets: Ticket[] = [
 
 export function TicketTable() {
   const [statusFilter, setStatusFilter] = useState<TicketStatus | "All">("All");
+  const navigate = useNavigate();
   
   const getStatusColor = (status: TicketStatus) => {
     switch (status) {
@@ -194,6 +195,10 @@ export function TicketTable() {
   const filteredTickets = statusFilter === "All" 
     ? mockTickets
     : mockTickets.filter(ticket => ticket.status === statusFilter);
+  
+  const handleViewTicket = (ticketId: string) => {
+    navigate(`/tickets/${ticketId}`);
+  };
   
   return (
     <>
@@ -252,7 +257,11 @@ export function TicketTable() {
           </TableHeader>
           <TableBody>
             {filteredTickets.map((ticket) => (
-              <TableRow key={ticket.id}>
+              <TableRow 
+                key={ticket.id} 
+                className="cursor-pointer hover:bg-purple-50"
+                onClick={() => handleViewTicket(ticket.id)}
+              >
                 <TableCell className="font-medium">{ticket.id}</TableCell>
                 <TableCell>{ticket.subject}</TableCell>
                 <TableCell>
@@ -285,7 +294,7 @@ export function TicketTable() {
                   </Badge>
                 </TableCell>
                 <TableCell>{formatDate(ticket.updatedAt)}</TableCell>
-                <TableCell>
+                <TableCell onClick={(e) => e.stopPropagation()}>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" className="h-8 w-8 p-0">
@@ -293,7 +302,7 @@ export function TicketTable() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleViewTicket(ticket.id)}>
                         <Eye className="mr-2 h-4 w-4" />
                         View details
                       </DropdownMenuItem>
