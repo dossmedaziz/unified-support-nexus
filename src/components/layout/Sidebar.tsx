@@ -1,115 +1,206 @@
 
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { cn } from "@/lib/utils";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useLocation, useNavigate } from "react-router-dom";
+import { AUTH_PATHS, USER_PATHS } from "@/navigation/paths";
+
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { 
-  Home, 
-  MessageSquare, 
-  Ticket, 
-  Users, 
+  LogOut, 
   Settings, 
-  Menu, 
-  X,
-  Smile,
+  UserCircle, 
+  UsersRound, 
+  MessageSquare, 
+  ChevronUp,
+  Ticket 
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/useAuth";
+import { LogoutDialog } from "./logout-dialog";
 
-const navItems = [
-  { name: "Dashboard", path: "/", icon: Home },
-  { name: "Inbox", path: "/inbox", icon: MessageSquare },
-  { name: "Tickets", path: "/tickets", icon: Ticket },
-  { name: "Team", path: "/team", icon: Users },
-  { name: "Settings", path: "/settings", icon: Settings },
-];
-
-interface SidebarProps {
-  onToggle?: (expanded: boolean) => void;
-}
-
-export function Sidebar({ onToggle }: SidebarProps) {
-  const [expanded, setExpanded] = useState(true);
+export function AppSidebar() {
   const location = useLocation();
-  const isMobile = useIsMobile();
-  
-  // Set initial state based on screen size
+  const navigate = useNavigate();
+  const { setIsAuthenticated } = useAuth();
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [storedUser, setStoredUser] = useState<{
+    full_name: string;
+    email: string;
+  } | null>(null);
+
   useEffect(() => {
-    setExpanded(!isMobile);
-  }, [isMobile]);
-  
-  // Notify parent component when sidebar expands/collapses
-  useEffect(() => {
-    if (onToggle) {
-      onToggle(expanded);
-    }
-  }, [expanded, onToggle]);
+    const userData = JSON.parse(localStorage.getItem("user") || "null");
+    setStoredUser(userData);
+  }, []);
+
+  const user = {
+    name: storedUser?.full_name,
+    email: storedUser?.email || "",
+    avatarUrl: "",
+    initials: storedUser?.full_name
+      ?.split(" ")
+      .map((n) => n[0])
+      .join(""),
+  };
+
+  const handleLogout = () => {
+    setShowLogoutDialog(true);
+  };
 
   return (
-    <div 
-      className={cn(
-        "h-screen fixed left-0 top-0 z-40 flex flex-col transition-all duration-300",
-        expanded ? "w-64" : "w-20",
-        isMobile && !expanded ? "-translate-x-full" : "translate-x-0",
-        "bg-gradient-to-b from-purple-100 to-blue-100 border-r border-purple-200"
-      )}
-    >
-      <div className="flex items-center p-4 border-b border-purple-200 h-16">
-        {expanded && (
-          <div className="flex items-center">
-            <Smile className="h-6 w-6 text-purple-500 mr-2" />
-            <h1 className="text-xl font-bold text-purple-700">KidSupport</h1>
+    <Sidebar collapsible="icon" className="border-r border-purple-200/70">
+      <SidebarHeader className="border-b border-purple-200/70 py-2">
+        <div className="flex items-center justify-center py-4 px-2">
+          <div className="flex items-center gap-2 group-data-[collapsible=icon]:hidden">
+            <img
+              src="/classquiz_logo.png"
+              alt="Company Logo"
+              className="h-10 w-auto rounded-md"
+            />
+            <span className="font-bold text-xl text-[#4945BE] tracking-tight">
+              ClassQuiz
+            </span>
           </div>
-        )}
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className={cn("ml-auto text-purple-700 hover:bg-purple-200 hover:text-purple-800")}
-          onClick={() => setExpanded(!expanded)}
-        >
-          {expanded ? <X size={20} /> : <Menu size={20} />}
-        </Button>
-      </div>
-      
-      <nav className="flex-1 p-4">
-        <ul className="space-y-2">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = location.pathname === item.path;
-            
-            return (
-              <li key={item.name}>
-                <Link 
-                  to={item.path}
-                  className={cn(
-                    "flex items-center p-3 rounded-md transition-colors",
-                    isActive 
-                      ? "bg-purple-200 text-purple-700" 
-                      : "text-purple-600 hover:bg-purple-100",
-                    !expanded && "justify-center"
-                  )}
-                >
-                  <Icon size={20} className={expanded ? "mr-3" : ""} />
-                  {expanded && <span className="font-medium">{item.name}</span>}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-      
-      <div className="p-4 border-t border-purple-200">
-        <div className="flex items-center">
-          <div className="w-10 h-10 rounded-full bg-purple-500 text-white flex items-center justify-center">
-            A
+          <div className="hidden group-data-[collapsible=icon]:flex justify-center items-center h-10 w-10 bg-[#4945BE] text-white text-xl font-bold rounded-md">
+            CQ
           </div>
-          {expanded && (
-            <div className="ml-3">
-              <p className="font-medium text-purple-700">Admin User</p>
-              <p className="text-xs text-purple-500">Administrator</p>
-            </div>
-          )}
         </div>
-      </div>
-    </div>
+      </SidebarHeader>
+      
+      <SidebarContent className="px-1 py-4">
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-[#4945BE]/80 font-bold px-4 pb-2">
+            Management
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  isActive={location.pathname.startsWith(`/${AUTH_PATHS.TEAMS}`)}
+                  onClick={() => navigate(`/${AUTH_PATHS.TEAMS}`)}
+                  className="transition-all rounded-xl hover:bg-purple-100/80 data-[active=true]:bg-purple-200 data-[active=true]:text-[#4945BE]"
+                >
+                  <UsersRound size={18} className="text-[#4945BE]" />
+                  <span className="font-medium">Manage Teams</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  isActive={location.pathname.startsWith(`/${AUTH_PATHS.USERS}`)}
+                  onClick={() => navigate(`/${AUTH_PATHS.USERS}`)}
+                  className="transition-all rounded-xl hover:bg-purple-100/80 data-[active=true]:bg-purple-200 data-[active=true]:text-[#4945BE]"
+                >
+                  <UserCircle size={18} className="text-[#4945BE]" />
+                  <span className="font-medium">Manage Users</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  isActive={location.pathname.startsWith(`/${AUTH_PATHS.CONVERSATIONS}`)}
+                  onClick={() => navigate(`/${AUTH_PATHS.CONVERSATIONS}`)}
+                  className="transition-all rounded-xl hover:bg-purple-100/80 data-[active=true]:bg-purple-200 data-[active=true]:text-[#4945BE]"
+                >
+                  <MessageSquare size={18} className="text-[#4945BE]" />
+                  <span className="font-medium">Conversations</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  isActive={location.pathname.startsWith(`/${AUTH_PATHS.TICKETS}`)}
+                  onClick={() => navigate(`/${AUTH_PATHS.TICKETS}`)}
+                  className="transition-all rounded-xl hover:bg-purple-100/80 data-[active=true]:bg-purple-200 data-[active=true]:text-[#4945BE]"
+                >
+                  <Ticket size={18} className="text-[#4945BE]" />
+                  <span className="font-medium">Tickets</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+      
+      <SidebarFooter className="border-t border-purple-200/70 py-2 mb-2">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton className="hover:bg-purple-100/80 rounded-xl">
+                  <Avatar className="h-8 w-8 shrink-0 ring-2 ring-purple-200 ring-offset-1">
+                    <AvatarImage src={user.avatarUrl} />
+                    <AvatarFallback className="bg-[#4945BE] text-white font-medium">
+                      {user.initials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col items-start">
+                    <span className="font-semibold text-[#4945BE]">{user.name}</span>
+                    <span className="text-xs text-purple-500 opacity-80 truncate max-w-[120px]">
+                      {user.email}
+                    </span>
+                  </div>
+                  <ChevronUp className="ml-auto h-4 w-4 text-[#4945BE] opacity-70" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                side="top"
+                className="w-[--radix-popper-anchor-width] bg-white border-purple-200 shadow-md rounded-xl p-1"
+              >
+                <DropdownMenuItem
+                  onClick={() => navigate(`/${USER_PATHS.PROFILE}`)}
+                  className="rounded-lg cursor-pointer hover:bg-purple-100 transition-colors focus:bg-purple-100 focus:text-[#4945BE]"
+                >
+                  <UserCircle className="mr-2 h-4 w-4 text-[#4945BE]" />
+                  <span>Profile</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => navigate(`/${USER_PATHS.SETTINGS}`)}
+                  className="rounded-lg cursor-pointer hover:bg-purple-100 transition-colors focus:bg-purple-100 focus:text-[#4945BE]"
+                >
+                  <Settings className="mr-2 h-4 w-4 text-[#4945BE]" />
+                  <span>Settings</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={handleLogout}
+                  className="rounded-lg cursor-pointer hover:bg-red-50 transition-colors focus:bg-red-50 focus:text-red-600"
+                >
+                  <LogOut className="mr-2 h-4 w-4 text-red-500" />
+                  <span className="text-red-500">Sign out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+
+      <LogoutDialog
+        isOpen={showLogoutDialog}
+        onClose={() => setShowLogoutDialog(false)}
+        onConfirm={() => {
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          setStoredUser(null);
+          setShowLogoutDialog(false);
+          setIsAuthenticated(false);
+        }}
+      />
+    </Sidebar>
   );
 }
