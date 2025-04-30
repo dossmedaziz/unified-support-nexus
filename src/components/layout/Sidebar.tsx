@@ -1,5 +1,12 @@
 
-import { useState, useEffect } from "react";
+import {
+  LogOut,
+  Settings,
+  UserCircle,
+  UsersRound,
+  MessageSquare,
+  ChevronUp,
+} from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AUTH_PATHS, USER_PATHS } from "@/navigation/paths";
 
@@ -9,7 +16,6 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -22,17 +28,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { 
-  LogOut, 
-  Settings, 
-  UserCircle, 
-  UsersRound, 
-  MessageSquare, 
-  ChevronUp,
-  Ticket 
-} from "lucide-react";
-import { useAuth } from "@/context/useAuth";
+import { useState, useEffect } from "react";
 import { LogoutDialog } from "./logout-dialog";
+import { useAuth } from "@/context/useAuth";
+import { Ticket } from "lucide-react";
 
 export function AppSidebar() {
   const location = useLocation();
@@ -64,81 +63,85 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-purple-200/70">
+    <Sidebar collapsible="icon" className="border-r border-purple-200/70 shadow-sm">
       <SidebarHeader className="border-b border-purple-200/70 py-2">
-        <div className="flex items-center justify-center py-4 px-2">
+        <a
+          className="flex items-center justify-center py-5 px-3 cursor-pointer"
+          onClick={() => navigate("/")}
+        >
           <div className="flex items-center gap-2 group-data-[collapsible=icon]:hidden">
             <img
               src="/classquiz_logo.png"
               alt="Company Logo"
               className="h-10 w-auto rounded-md"
             />
-            <span className="font-bold text-xl text-[#4945BE] tracking-tight">
-              ClassQuiz
-            </span>
+            <span className="font-bold text-xl text-[#4945BE] tracking-tight">ClassQuiz</span>
           </div>
           <div className="hidden group-data-[collapsible=icon]:flex justify-center items-center h-10 w-10 bg-[#4945BE] text-white text-xl font-bold rounded-md">
             CQ
           </div>
-        </div>
+        </a>
       </SidebarHeader>
-      
-      <SidebarContent className="px-1 py-4">
+      <SidebarContent className="px-3 py-6">
         <SidebarGroup>
-          <SidebarGroupLabel className="text-[#4945BE]/80 font-bold px-4 pb-2">
-            Management
-          </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="space-y-2">
               <SidebarMenuItem>
                 <SidebarMenuButton
-                  isActive={location.pathname.startsWith(`/${AUTH_PATHS.TEAMS}`)}
+                  isActive={location.pathname.startsWith(
+                    `/${AUTH_PATHS.TEAMS}`
+                  )}
                   onClick={() => navigate(`/${AUTH_PATHS.TEAMS}`)}
-                  className="transition-all rounded-xl hover:bg-purple-100/80 data-[active=true]:bg-purple-200 data-[active=true]:text-[#4945BE]"
+                  className="transition-all py-3 rounded-xl hover:bg-purple-100/80 data-[active=true]:bg-purple-200 data-[active=true]:text-[#4945BE]"
                 >
-                  <UsersRound size={18} className="text-[#4945BE]" />
-                  <span className="font-medium">Manage Teams</span>
+                  <UsersRound size={20} className="text-[#4945BE]" />
+                  <span className="font-medium text-base">Manage Teams</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
               <SidebarMenuItem>
                 <SidebarMenuButton
-                  isActive={location.pathname.startsWith(`/${AUTH_PATHS.USERS}`)}
+                  isActive={location.pathname.startsWith(
+                    `/${AUTH_PATHS.USERS}`
+                  )}
                   onClick={() => navigate(`/${AUTH_PATHS.USERS}`)}
-                  className="transition-all rounded-xl hover:bg-purple-100/80 data-[active=true]:bg-purple-200 data-[active=true]:text-[#4945BE]"
+                  className="transition-all py-3 rounded-xl hover:bg-purple-100/80 data-[active=true]:bg-purple-200 data-[active=true]:text-[#4945BE]"
                 >
-                  <UserCircle size={18} className="text-[#4945BE]" />
-                  <span className="font-medium">Manage Users</span>
+                  <UserCircle size={20} className="text-[#4945BE]" />
+                  <span className="font-medium text-base">Manage Users</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
               <SidebarMenuItem>
                 <SidebarMenuButton
-                  isActive={location.pathname.startsWith(`/${AUTH_PATHS.CONVERSATIONS}`)}
+                  isActive={location.pathname.startsWith(
+                    `/${AUTH_PATHS.CONVERSATIONS}`
+                  )}
                   onClick={() => navigate(`/${AUTH_PATHS.CONVERSATIONS}`)}
-                  className="transition-all rounded-xl hover:bg-purple-100/80 data-[active=true]:bg-purple-200 data-[active=true]:text-[#4945BE]"
+                  className="transition-all py-3 rounded-xl hover:bg-purple-100/80 data-[active=true]:bg-purple-200 data-[active=true]:text-[#4945BE]"
                 >
-                  <MessageSquare size={18} className="text-[#4945BE]" />
-                  <span className="font-medium">Conversations</span>
+                  <MessageSquare size={20} className="text-[#4945BE]" />
+                  <span className="font-medium text-base">Conversations</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
               <SidebarMenuItem>
                 <SidebarMenuButton
-                  isActive={location.pathname.startsWith(`/${AUTH_PATHS.TICKETS}`)}
+                  isActive={location.pathname.startsWith(
+                    `/${AUTH_PATHS.TICKETS}`
+                  )}
                   onClick={() => navigate(`/${AUTH_PATHS.TICKETS}`)}
-                  className="transition-all rounded-xl hover:bg-purple-100/80 data-[active=true]:bg-purple-200 data-[active=true]:text-[#4945BE]"
+                  className="transition-all py-3 rounded-xl hover:bg-purple-100/80 data-[active=true]:bg-purple-200 data-[active=true]:text-[#4945BE]"
                 >
-                  <Ticket size={18} className="text-[#4945BE]" />
-                  <span className="font-medium">Tickets</span>
+                  <Ticket size={20} className="text-[#4945BE]" />
+                  <span className="font-medium text-base">Tickets</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      
-      <SidebarFooter className="border-t border-purple-200/70 py-2 mb-2">
+      <SidebarFooter className="border-t border-purple-200/70 py-3 mb-2">
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
@@ -204,7 +207,3 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
-
-// Export the AppSidebar as a named component and as default for compatibility
-export { AppSidebar as Sidebar };
-export default AppSidebar;
