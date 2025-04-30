@@ -204,3 +204,7 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
+
+// Export the AppSidebar as a named component and as default for compatibility
+export { AppSidebar as Sidebar };
+export default AppSidebar;

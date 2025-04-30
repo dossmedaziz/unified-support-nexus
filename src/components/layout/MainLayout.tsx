@@ -1,6 +1,6 @@
 
 import { ReactNode, useState, useEffect } from "react";
-import { Sidebar } from "./Sidebar";
+import { AppSidebar } from "./Sidebar";  
 import { Header } from "./Header";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -27,7 +27,7 @@ export function MainLayout({ children }: MainLayoutProps) {
   
   return (
     <div className="flex h-screen bg-gradient-to-b from-purple-50 to-blue-50">
-      <Sidebar onToggle={handleSidebarToggle} />
+      <AppSidebar />
       <div 
         className="flex-1 transition-all duration-300"
         style={{ 
